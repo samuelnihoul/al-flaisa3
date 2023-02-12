@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
-using 
+using System.Net.Http.Headers;
 
  public struct DepartureDate
 {
@@ -32,9 +32,13 @@ public class EmissionResult
 [ApiController]
 public class FlightController : ControllerBase
 {
+    private readonly IConfiguration _configuration;
+    public FlightController(IConfiguration configuration) { _configuration = configuration; }
+    
     [HttpGet]
-    public async Task<IActionResult> GetEmissions(string apiKey)
+    public async Task<IActionResult> GetEmissions()
     {
+        var apiKey = _configuration.GetValue<string>("API_KEY");
         var flights = new List<Flight>
         {
             new Flight
@@ -66,6 +70,7 @@ public class FlightController : ControllerBase
         var requestBody = JsonConvert.SerializeObject(new { flights });
 
         using (var httpClient = new HttpClient())
+            
         {
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
