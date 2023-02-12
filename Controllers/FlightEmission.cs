@@ -1,33 +1,34 @@
-﻿using System;
-using System.Net.Http;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
 
 public class FlightEmission
 {
-    public string Origin { get; set; }
-    public string Destination { get; set; }
-    public string OperatingCarrierCode { get; set; }
+    public string? Origin { get; set; }
+    public string? Destination { get; set; }
+    public string? OperatingCarrierCode { get; set; }
     public int FlightNumber { get; set; }
     public DateTime DepartureDate { get; set; }
 }
 
 public class FlightEmissionRequest
 {
-    public List<FlightEmission> Flights { get; set; }
+    public List<FlightEmission>? Flights { get; set; }
 }
 
 public class EmissionResult
 {
     // Your code to parse the JSON response from the API
 }
-
+[ApiController]
+[Route("api/[controller]")]
 public class FlightEmissionsController : Controller
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _apiKey;
 
-    public FlightEmissionsController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public FlightEmissionsController(IHttpClientFactory httpClientFactory,
+                                     IConfiguration configuration)
     {
         _httpClientFactory = httpClientFactory;
         _apiKey = configuration.GetValue<string>("API_KEY");
